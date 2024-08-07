@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Scroll Animation</title>
+    <style>
+        body { margin: 0; overflow-x: hidden; }
+        canvas { position: fixed; top: 0; left: 0; }
+        .content-section {
+            position: relative;
+            height: 100vh;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 50px;
+            color: white;
+            font-family: Arial, sans-serif;
+        }
+        .left-content, .right-content {
+            width: 40%;
+        }
+    </style>
+</head>
+<body>
+    <div class="content-section">
+        <div class="left-content">
+            <h2>Left Section 1</h2>
+            <p>This is the content for the left section of the first slide.</p>
+        </div>
+        <div class="right-content">
+            <h2>Right Section 1</h2>
+            <p>This is the content for the right section of the first slide.</p>
+        </div>
+    </div>
+    <div class="content-section">
+        <div class="left-content">
+            <h2>Left Section 2</h2>
+            <p>This is the content for the left section of the second slide.</p>
+        </div>
+        <div class="right-content">
+            <h2>Right Section 2</h2>
+            <p>This is the content for the right section of the second slide.</p>
+        </div>
+    </div>
+    <div class="content-section">
+        <div class="left-content">
+            <h2>Left Section 3</h2>
+            <p>This is the content for the left section of the third slide.</p>
+        </div>
+        <div class="right-content">
+            <h2>Right Section 3</h2>
+            <p>This is the content for the right section of the third slide.</p>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.7.1/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.7.1/ScrollToPlugin.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

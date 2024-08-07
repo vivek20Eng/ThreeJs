@@ -1,0 +1,18 @@
+{
+  "name": "threejs-scroll-animation",
+  "version": "1.0.0",
+  "description": "A Three.js project with GSAP for scroll animations",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "gsap": "^3.12.5",
+    "nodemon": "^3.1.4",
+    "three": "^0.167.1"
+  },
+  "author": "Vivek",
+  "license": "ISC"
+}
