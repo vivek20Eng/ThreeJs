@@ -1,0 +1,12 @@
+Model Information:
+ AUTHOR:  VIVEK Model  
+* title:	Binary Domain - Daniel Marshall
+* source:	https://sketchfab.com/3d-models/binary-domain-daniel-marshall-9e4104f29b2b4684bc9078e5e024dbc1
+* author:	We_Will_Meet_Again (https://sketchfab.com/We_Will_Meet_Again)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Binary Domain - Daniel Marshall" (https://sketchfab.com/3d-models/binary-domain-daniel-marshall-9e4104f29b2b4684bc9078e5e024dbc1) by We_Will_Meet_Again (https://sketchfab.com/We_Will_Meet_Again) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
