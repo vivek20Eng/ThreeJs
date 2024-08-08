@@ -1,3 +1,5 @@
+
+
 # Three.js Scroll Animation Project
 
 ![Three.js](https://img.shields.io/badge/Three.js-%23323330.svg?style=for-the-badge&logo=three.js&logoColor=white)
@@ -6,11 +8,13 @@
 ![Express](https://img.shields.io/badge/Express-%23000000.svg?style=for-the-badge&logo=express&logoColor=white)
 ![Nodemon](https://img.shields.io/badge/Nodemon-%2376D04B.svg?style=for-the-badge&logo=nodemon&logoColor=white)
 
+![Scrolling three js](screenshots/1.png) 
+
 ## Setup
 
 1. Clone the repository and navigate into the project directory.
     ```sh
-    git clone <repository-url>
+    git clone https://github.com/vivek20Eng/SvelteThreeJs.git
     cd three-js
     ```
 
@@ -49,3 +53,9 @@ This project demonstrates a simple Three.js setup with GSAP for scroll animation
 - [nodemon](https://www.npmjs.com/package/nodemon)
 - [three](https://www.npmjs.com/package/three)
 - [gsap](https://www.npmjs.com/package/gsap)
+
+## 🖼️ Screenshots
+
+![Scrolling Window Animation](screenshots/1.png) 
+![Scrolling Window Animation](screenshots/2.png) 
+![Scrolling Window Animation](screenshots/3.png) 
