@@ -4,139 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>3D Scroll Animation</title>
+    <link rel="stylesheet" href="style.css">
     <style>
-        html {
-            scroll-snap-type: y mandatory;
-        }
-        body { 
-            margin: 0; 
-            overflow-x: hidden;
-            background-color: #000;
-            color: white;
-            font-family: Arial, sans-serif;
-        }
-        canvas { 
-            position: fixed; 
-            top: 0; 
-            left: 0; 
-            z-index: 1;
-        }
-        .content-wrapper {
-            position: relative;
-            z-index: 2;
-            height: 300vh; 
-        }
-        .content-section {
-            scroll-snap-align: start;
-            position: relative;
-            width: 100vw;
-            height: 100vh;
-            display: flex;
-            align-items: center;
-            padding: 0 20px;
-            transition: transform 1s ease;
-            box-sizing: border-box;
-        }
-        .content-section:nth-child(even) {
-            justify-content: flex-end;
-            padding-right: 5rem;
-        }
-        .content-section:nth-child(odd) {
-            justify-content: flex-start;
-            padding-left: 5rem;
-        }
-        .right-content, .left-content {
-            width: 100%;
-            max-width: 600px;
-            background-color: rgba(0, 0, 0, 0.7);
-            padding: 20px;
-            border-radius: 10px;
-            backdrop-filter: blur(5px);
-            display: flex;
-            flex-direction: column;
-            box-sizing: border-box;
-        }
-        .left-content {
-            text-align: left;
-        }
-        .right-content {
-            text-align: left;
-        }
-        h2 {
-            font-size: 1.5em;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        p {
-            line-height: 1.6;
-        }
-        .button {
-            display: inline-block;
-            padding: 10px 20px;
-            background-color: #007bff;
-            color: white;
-            text-decoration: none;
-            border-radius: 5px;
-            font-size: 1em;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-        .button:hover {
-            background-color: #0056b3;
-        }
-        .social-icons {
-            display: flex;
-            gap: 10px;
-            margin-top: 10px;
-        }
-        .social-icons a {
-            color: white;
-            font-size: 1.5em;
-            transition: color 0.3s;
-        }
-        .social-icons a:hover {
-            color: #007bff;
-        }
-
-        /* Responsive styles */
-        @media (max-width: 768px) {
-            .content-section {
-                padding: 0 10px;
-            }
-            .left-content, .right-content {
-                width: 50%;
-                max-width: 100%;
-                padding: 15px;
-            }
-            h2 {
-                font-size: 1.2em;
-            }
-            .content-section:nth-child(even) {
-                padding-right: 0rem;
-            }
-            .content-section:nth-child(odd) {
-                padding-left: 0rem;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .content-section {
-                padding: 0 5px;
-            }
-            .left-content, .right-content {
-                padding: 10px;
-            }
-            h2 {
-                font-size: 1em;
-            }
-            .button {
-                font-size: 0.9em;
-                padding: 8px 15px;
-            }
-        }
+        
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
@@ -166,7 +36,7 @@
                 <p>Three.js is a JavaScript library used to create and display animated 3D computer graphics in a web browser using WebGL.</p>
             </div>
         </div>
-        <div class="content-section">
+        <div class="content-section banner-section">
             <div class="right-content">
                 <h2><i class="fas fa-rocket"></i> Project Goals</h2>
                 <p>This section highlights the goals and objectives of the project, focusing on enhancing user interaction and visual appeal using Three.js and GSAP.</p>
