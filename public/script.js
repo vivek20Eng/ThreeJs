@@ -219,15 +219,15 @@ gsap.from(torus.scale, {
     z: 0,
     duration: 1.5,
     ease: 'elastic.out(1, 0.3)',
-    onComplete: () => {
-        gsap.to(torus.rotation, {
-            y: Math.PI * 2,
-            duration: 2,
-            ease: 'power2.inOut',
-            repeat: -1,
-            yoyo: true
-        });
-    }
+    // onComplete: () => {
+    //     gsap.to(torus.rotation, {
+    //         y: Math.PI * 2,
+    //         duration: 2,
+    //         ease: 'power2.inOut',
+    //         repeat: -1,
+    //         yoyo: true
+    //     });
+    // }
 });
 
 // Animation loop
@@ -235,7 +235,7 @@ function animate() {
     requestAnimationFrame(animate);
     
     // Rotate torus continuously
-    torus.rotation.y += 0.005;
+    torus.rotation.y += 0.001;
 
     // Animate stars
     stars.rotation.y += 0.0002;
