@@ -67,7 +67,7 @@ const ambientLight = new THREE.AmbientLight(0x404040, 0.5);
 scene.add(ambientLight);
 
 const pointLight = new THREE.PointLight(0xffffff, 1, 100);
-pointLight.position.set(0, 0, 20);
+pointLight.position.set(30, 20, 20);
 scene.add(pointLight);
 
 // Position camera
