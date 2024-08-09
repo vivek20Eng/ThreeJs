@@ -327,7 +327,7 @@ function initializeScene() {
     // Add bounce effect to torus with decreasing height
     const bounceHeight = 10 * (1 - scrollY); // Decrease bounce height as we scroll down
     gsap.to(torus.position, {
-      y: yTranslation + Math.sin(Date.now() * 0.005) * bounceHeight,
+      y: yTranslation + Math.sin(Date.now() * 0.001) ,
       duration: 0.5,
       ease: "power1.inOut",
       repeat: -1,
