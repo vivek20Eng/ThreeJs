@@ -42,6 +42,15 @@ function initializeScene() {
   const torus = new THREE.Mesh(torusGeometry, torusMaterial);
   scene.add(torus);
 
+  // Initial torus animation (zoom out and bounce)
+  gsap.from(torus.scale, {
+    x: 0.1,
+    y: 0.1,
+    z: 0.1,
+    duration: 1.5,
+    ease: "elastic.out(1, 0.3)",
+  });
+
   // Create text
   const loader = new THREE.FontLoader();
   let scrollTextMeshes = [];
@@ -168,6 +177,13 @@ function initializeScene() {
 
       // Add model to the scene
       scene.add(model);
+
+      // Initial model animation (move from bottom to top)
+      gsap.from(model.position, {
+        y: -50,
+        duration: 2,
+        ease: "power2.out",
+      });
     },
     undefined,
     function (error) {
@@ -195,6 +211,25 @@ function initializeScene() {
   }
 
   scene.add(blueShapesGroup);
+
+  // Create new geometric models
+  const geometries = [
+    new THREE.BoxGeometry(5, 5, 5),
+    new THREE.CircleGeometry(3, 32),
+    new THREE.ConeGeometry(3, 5, 32),
+  ];
+
+  const blueMaterial = new THREE.MeshPhongMaterial({ color: 0x0066cc });
+
+  const newModels = [];
+
+  for (let i = 0; i < geometries.length; i++) {
+    const mesh = new THREE.Mesh(geometries[i], blueMaterial);
+    mesh.position.set((i - 1) * 15, 40, 0);
+    mesh.rotation.x = Math.PI / 6; // Incline the models
+    scene.add(mesh);
+    newModels.push(mesh);
+  }
 
   // Scroll-based navigation
   let scrollY = 0;
@@ -245,6 +280,7 @@ function initializeScene() {
       const scale = 10 * (1 + 0.2 * Math.sin(scrollY * Math.PI * 2));
       gsap.to(model.position, {
         x: xTranslation + 10,
+        y: -10 + scrollY * 20, // Move from bottom to top
         duration: 1,
         ease: "power2.out",
       });
@@ -271,7 +307,7 @@ function initializeScene() {
       }
     }
 
-    // Update torus with zigzag pattern
+    // Update torus with zigzag pattern and bounce effect
     const xTranslation = 20 * Math.sin(scrollY * Math.PI * 4);
     const yTranslation = 10 * Math.cos(scrollY * Math.PI * 2);
     gsap.to(torus.position, {
@@ -286,6 +322,16 @@ function initializeScene() {
       y: scrollY * Math.PI * 4,
       duration: 1,
       ease: "power2.out",
+    });
+
+    // Add bounce effect to torus with decreasing height
+    const bounceHeight = 10 * (1 - scrollY); // Decrease bounce height as we scroll down
+    gsap.to(torus.position, {
+      y: yTranslation + Math.sin(Date.now() * 0.005) * bounceHeight,
+      duration: 0.5,
+      ease: "power1.inOut",
+      repeat: -1,
+      yoyo: true,
     });
 
     // Update text
@@ -348,6 +394,12 @@ function initializeScene() {
       shape.rotation.y += 0.01 * (index + 1);
     });
 
+    // Animate new geometric models
+    newModels.forEach((model, index) => {
+      model.rotation.y += 0.02;
+      model.rotation.z += 0.01;
+    });
+
     renderer.render(scene, camera);
   }
 
@@ -359,6 +411,7 @@ function initializeScene() {
     camera.updateProjectionMatrix();
     renderer.setSize(window.innerWidth, window.innerHeight);
   });
+
 
   // Generate gradient texture
   function generateGradientTexture() {

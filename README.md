@@ -60,3 +60,4 @@ This project demonstrates a simple Three.js setup with GSAP for scroll animation
 ![Scrolling Window Animation](screenshots/1.png) 
 ![Scrolling Window Animation](screenshots/2.png) 
 ![Scrolling Window Animation](screenshots/3.png) 
+![Scrolling Window Animation](screenshots/4.png) 
