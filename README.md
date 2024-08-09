@@ -1,6 +1,7 @@
 
 
 # Three.js Scroll Animation Project
+🌐 demo link: [Live Demo](https://three-js-nu-liart.vercel.app/)
 
 ![Three.js](https://img.shields.io/badge/Three.js-%23323330.svg?style=for-the-badge&logo=three.js&logoColor=white)
 ![GSAP](https://img.shields.io/badge/GSAP-%2326A69A.svg?style=for-the-badge&logo=greensock&logoColor=white)
