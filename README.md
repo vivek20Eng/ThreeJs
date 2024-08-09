@@ -15,7 +15,7 @@
 
 1. Clone the repository and navigate into the project directory.
     ```sh
-    git clone https://github.com/vivek20Eng/SvelteThreeJs.git
+    git clone https://github.com/vivek20Eng/ThreeJs.git
     cd three-js
     ```
 
