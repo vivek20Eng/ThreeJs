@@ -83,7 +83,6 @@ function initializeScene() {
       for (let i = 0; i < textGeometries.length; i++) {
         const scrollTextMesh = new THREE.Mesh(textGeometries[i], textMaterial);
         scrollTextMesh.position.set(0, -1, 0);
-        // Center the text initially
         scene.add(scrollTextMesh);
         scrollTextMeshes.push(scrollTextMesh);
       }
@@ -148,118 +147,165 @@ function initializeScene() {
   const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
   scene.add(particlesMesh);
 
+  // Load and add the 3D model
+  const gltfLoader = new THREE.GLTFLoader();
+  let model;
+  let totalRotation = 0;
+  const maxRotation = Math.PI * 6; // 3 full rotations
+
+  gltfLoader.load(
+    "models/3dMen/scene.gltf",
+    function (gltf) {
+      model = gltf.scene;
+
+      model.scale.set(10, 10, 10);
+
+      // Rotate the model to make it stand upright
+      model.rotation.x = Math.PI / 2;
+      model.rotation.z = Math.PI / 0.03;
+
+      model.position.set(40, -10, 0);
+
+      // Add model to the scene
+      scene.add(model);
+    },
+    undefined,
+    function (error) {
+      console.error("An error occurred loading the model:", error);
+    }
+  );
+
+  // Create background blue shapes
+  const blueShapesGroup = new THREE.Group();
+  const blueShapesMaterial = new THREE.MeshPhongMaterial({
+    color: 0x0066cc,
+    specular: 0x555555,
+    shininess: 30,
+  });
+
+  for (let i = 0; i < 5; i++) {
+    const geometry = new THREE.SphereGeometry(3, 32, 32);
+    const mesh = new THREE.Mesh(geometry, blueShapesMaterial);
+    mesh.position.set(
+      (Math.random() - 0.5) * 50,
+      -50 - i * 20,
+      -30 - Math.random() * 20
+    );
+    blueShapesGroup.add(mesh);
+  }
+
+  scene.add(blueShapesGroup);
+
   // Scroll-based navigation
-  let currentSection = 0;
-  const totalSections = 4;
   let scrollY = 0;
-  let scrollDirection = 1; // 1 for right, -1 for left
-  let previousScrollDirection = 1;
-  let zigzagDirection = 1;
+  const totalSections = 4;
 
   // Add event listeners for both mouse wheel and scrollbar
   window.addEventListener("wheel", (event) => {
-    scrollY += event.deltaY * 0.01;
+    scrollY += event.deltaY * 0.001;
+    scrollY = Math.max(0, Math.min(scrollY, 1));
+    // Clamp between 0 and 1
     updateScene();
   });
 
   window.addEventListener("scroll", () => {
-    const scrollHeight = document.body.scrollHeight - window.innerHeight;
-    scrollY = (window.pageYOffset / scrollHeight) * (totalSections - 1);
+    const scrollHeight =
+      document.documentElement.scrollHeight - window.innerHeight;
+    scrollY = window.pageYOffset / scrollHeight;
     updateScene();
   });
 
   // Add event listeners for touch events
   window.addEventListener("touchstart", handleTouchStart, false);
   window.addEventListener("touchmove", handleTouchMove, false);
-  window.addEventListener("touchend", handleTouchEnd, false);
 
   let touchStartY = 0;
-  let touchStartTime = 0;
-  let touchEndY = 0;
-  let touchEndTime = 0;
 
   function handleTouchStart(event) {
     touchStartY = event.touches[0].clientY;
-    touchStartTime = performance.now();
   }
 
   function handleTouchMove(event) {
-    scrollY += (event.touches[0].clientY - touchStartY) * 0.01;
+    const touchY = event.touches[0].clientY;
+    const deltaY = touchStartY - touchY;
+    scrollY += deltaY * 0.001;
+    scrollY = Math.max(0, Math.min(scrollY, 1));
+    // Clamp between 0 and 1
+    touchStartY = touchY;
     updateScene();
   }
 
-  function handleTouchEnd(event) {
-    touchEndY = event.changedTouches[0].clientY;
-    touchEndTime = performance.now();
-
-    // Determine the scroll direction based on touch events
-    scrollDirection = touchEndY > touchStartY ? 1 : -1;
-    previousScrollDirection = scrollDirection;
-  }
-
   function updateScene() {
-    scrollY = Math.max(0, Math.min(scrollY, totalSections - 1));
-    currentSection = Math.floor(scrollY);
+    const currentSection = Math.floor(scrollY * totalSections);
 
-    // Determine the current scroll direction
-    scrollDirection = scrollY > previousScrollDirection ? 1 : -1;
-    previousScrollDirection = scrollDirection;
+    // Update 3D model
+    if (model) {
+      // Translate the model horizontally and scale based on scroll position
+      const xTranslation = 30 * Math.sin(scrollY * Math.PI);
+      const scale = 10 * (1 + 0.2 * Math.sin(scrollY * Math.PI * 2));
+      gsap.to(model.position, {
+        x: xTranslation + 10,
+        duration: 1,
+        ease: "power2.out",
+      });
+      gsap.to(model.scale, {
+        x: 5 + scale * 0.2,
+        y: 5 + scale * 0.2,
+        z: 5 + scale * 0.2,
+        duration: 1,
+        ease: "power2.out",
+      });
 
-    // Translate torus based on scroll
-    let xTranslation =
-      ((scrollY * 20 * -scrollDirection) / 4) * (scrollY / (totalSections - 1));
-    let yRotation =
-      ((scrollY * Math.PI * -scrollDirection) / 4) *
-      (scrollY / (totalSections - 1));
-    let zRotation =
-      ((scrollY * Math.PI * -scrollDirection) / 4) *
-      (scrollY / (totalSections - 1));
+      // Rotate the model smoothly around the Z-axis based on scroll position
+      if (totalRotation < maxRotation) {
+        const zRotation = Math.min(
+          scrollY * Math.PI * 6,
+          maxRotation - totalRotation
+        );
+        totalRotation += zRotation;
+        gsap.to(model.rotation, {
+          z: model.rotation.z + zRotation,
+          duration: 1,
+          ease: "power2.out",
+        });
+      }
+    }
 
-    // Add zig-zag effect in y
-    yRotation += zigzagDirection * Math.sin(scrollY * Math.PI * 2) * 0.5;
-
+    // Update torus with zigzag pattern
+    const xTranslation = 20 * Math.sin(scrollY * Math.PI * 4);
+    const yTranslation = 10 * Math.cos(scrollY * Math.PI * 2);
     gsap.to(torus.position, {
       x: xTranslation,
+      y: yTranslation,
       duration: 1,
       ease: "power2.out",
     });
 
     gsap.to(torus.rotation, {
-      y: yRotation,
-      z: zRotation,
+      x: scrollY * Math.PI * 2,
+      y: scrollY * Math.PI * 4,
       duration: 1,
       ease: "power2.out",
     });
 
-    // Move text vertically
+    // Update text
     const textTargetPositions = [{ y: 10 }, { y: 20 }, { y: 30 }, { y: 40 }];
 
     for (let i = 0; i < scrollTextMeshes.length; i++) {
       const textNewPosition = textTargetPositions[i];
       gsap.to(scrollTextMeshes[i].position, {
         y: textNewPosition.y,
+        x: Math.sin(scrollY * Math.PI * 2) * 10,
         duration: 1.5,
         ease: "power2.inOut",
       });
     }
 
-    // Change torus color
+    // Update torus color
     const hue = (currentSection / (totalSections - 1)) * 0.1 + 0.5;
     torus.material.color.setHSL(hue, 1, 0.5);
 
-    // Scroll text animation
-    for (let i = 0; i < scrollTextMeshes.length; i++) {
-      gsap.to(scrollTextMeshes[i].position, {
-        x: Math.sin(scrollY * Math.PI * 2) * 10,
-        duration: 1,
-        ease: "power2.inOut",
-      });
-    }
-
-    // Update the zig-zag direction
-    zigzagDirection *= -1;
-
-    // Zoom in on the stars
+    // Update stars
     const starScale = 1 + 0.5 * Math.sin(scrollY * Math.PI * 2);
     gsap.to(stars.scale, {
       x: starScale,
@@ -269,78 +315,18 @@ function initializeScene() {
       ease: "power2.out",
     });
 
-    // Adjust the camera position to center on the stars
-    adjustCameraPosition();
+    // Update blue shapes
+    blueShapesGroup.children.forEach((shape, index) => {
+      const yPos = -50 + scrollY * 100 + index * 20;
+      const xPos = Math.sin((yPos + index * 30) * 0.02) * 20;
+      gsap.to(shape.position, {
+        y: yPos > 50 ? -50 : yPos,
+        x: xPos,
+        duration: 1,
+        ease: "power2.out",
+      });
+    });
   }
-
-  // Initial smooth up and down animation for the torus
-  gsap.to(torus.position, {
-    y: "+=2.9",
-    x: "+=2.9",
-    duration: 2,
-    ease: "power1.inOut",
-    yoyo: true,
-    repeat: -1,
-  });
-
-  // Load and add the 3D model
-  const gltfLoader = new THREE.GLTFLoader();
-  gltfLoader.load(
-    "models/3dMen/scene.gltf",
-    function (gltf) {
-      const model = gltf.scene;
-
-      model.scale.set(10, 10, 10);
-
-      // Rotate the model to make it stand upright
-      model.rotation.x = Math.PI / 2;
-      model.rotation.z = Math.PI / 0.05;
-
-      model.position.set(10, -10, 0);
-
-      // Add model to the scene
-      scene.add(model);
-
-      // Animate model based on scroll
-      function animateModel() {
-        requestAnimationFrame(animateModel);
-
-        // Scale the model based on scroll position
-        const scale = 10 * (1 + 0.2 * Math.sin(scrollY * Math.PI * 2));
-        gsap.to(model.scale, {
-          x: scale,
-          y: scale,
-          z: scale,
-          duration: 1,
-          ease: "power2.out",
-        });
-
-        // Translate the model horizontally based on scroll position
-        const xTranslation = 30;
-        gsap.to(model.position, {
-          x: xTranslation,
-          duration: 1,
-          ease: "power2.out",
-        });
-
-        // Rotate the model smoothly around the Z-axis based on scroll position
-        const zRotation = scrollY * 0.01;
-        gsap.to(model.rotation, {
-          z: zRotation,
-          duration: 2,
-          ease: "power2.out",
-        });
-
-        renderer.render(scene, camera);
-      }
-
-      animateModel();
-    },
-    undefined,
-    function (error) {
-      console.error("An error occurred loading the model:", error);
-    }
-  );
 
   // Animation loop
   function animate() {
@@ -356,6 +342,11 @@ function initializeScene() {
     for (let i = 0; i < scrollTextMeshes.length; i++) {
       scrollTextMeshes[i].material.uniforms.time.value += 0.05;
     }
+
+    // Animate blue shapes
+    blueShapesGroup.children.forEach((shape, index) => {
+      shape.rotation.y += 0.01 * (index + 1);
+    });
 
     renderer.render(scene, camera);
   }
@@ -381,21 +372,5 @@ function initializeScene() {
     context.fillStyle = gradient;
     context.fillRect(0, 0, 256, 256);
     return canvas;
-  }
-
-  function adjustCameraPosition() {
-    const cameraZ = 30 - 10 * Math.sin(scrollY * Math.PI * 2);
-    const targetPosition = new THREE.Vector3(
-      camera.position.x,
-      camera.position.y,
-      cameraZ
-    );
-    gsap.to(camera.position, {
-      x: targetPosition.x,
-      y: targetPosition.y,
-      z: targetPosition.z,
-      duration: 10,
-      ease: "power2.out",
-    });
   }
 }
